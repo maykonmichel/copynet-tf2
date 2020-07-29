@@ -8,7 +8,7 @@ from tensorflow.keras.layers import Dense, Embedding, GRU
 class Encoder(Model):
     def __init__(self, vocab_size, embed_size, hidden_size, oov_idx):
         super(Encoder, self).__init__()
-        self.embed = Embedding(vocab_size, embed_size)
+        self.embed = Embedding(vocab_size, embed_size, mask_zero=True)
         self.gru = tf.keras.layers.Bidirectional(GRU(hidden_size, return_sequences=True))
         self.vocab_placeholder = tf.constant([vocab_size], tf.int32)
         self.oov_idx = oov_idx
@@ -30,7 +30,7 @@ class TimestepDecoder(Model):
         super(TimestepDecoder, self).__init__()
         self.vocab_size = vocab_size
         self.hidden_size = hidden_size
-        self.embed = Embedding(vocab_size, embed_size)
+        self.embed = Embedding(vocab_size, embed_size, mask_zero=True)
         self.gru = GRU(hidden_size, return_sequences=True)
         self.max_oovs = max_oovs # largest number of OOVs available per sample
 
